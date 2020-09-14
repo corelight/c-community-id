@@ -119,8 +119,8 @@ static void communityid_sha1_dbg(const gchar *msg, const void* data, gsize len)
  * correctly or needs flipping for abstracting flow directionality.
  */
 static gboolean communityid_tuple_lt(guint8 addr_len,
-                                     guchar *saddr, guchar  *daddr,
-                                     guint16 *sport, guint16 *dport)
+                                     const guchar *saddr, const guchar  *daddr,
+                                     const guint16 *sport, const guint16 *dport)
 {
     int addrcmp = memcmp(saddr, daddr, addr_len);
     int ports_lt = (sport != NULL && dport != NULL) ? *sport < *dport : TRUE;
@@ -155,8 +155,8 @@ static gboolean communityid_tuple_lt(guint8 addr_len,
  * the return value is TRUE.
  */
 static gboolean communityid_calc(communityid_cfg_t *cfg, guint8 proto,
-                                 guint8 addr_len, guchar *saddr, guchar *daddr,
-                                 guint16 *sport, guint16 *dport,
+                                 guint8 addr_len, const guchar *saddr, const guchar *daddr,
+                                 const guint16 *sport, const guint16 *dport,
                                  gchar **result)
 {
     gboolean is_one_way = FALSE;
@@ -292,12 +292,12 @@ static gboolean communityid_calc(communityid_cfg_t *cfg, guint8 proto,
         /* Ordered correctly, no need to flip. */
     } else {
         /* Need to flip endpoints for consistent hashing. */
-        guchar *tmp_addr = saddr;
+        const guchar *tmp_addr = saddr;
         saddr = daddr;
         daddr = tmp_addr;
 
         if (sport != NULL && dport != NULL) {
-            guint16 *tmp_port = sport;
+            const guint16 *tmp_port = sport;
             sport = dport;
             dport = tmp_port;
         }
@@ -348,7 +348,7 @@ static gboolean communityid_calc(communityid_cfg_t *cfg, guint8 proto,
         /* Convert binary SHA-1 to ASCII representation.
          * 2 hex digits for every byte + 1 for trailing \0:
          */
-        gchar *ptr = NULL;
+        gchar *ptr;
         gsize i;
 
         *result = (gchar*) g_malloc(strlen(CID_VERSION_PREFIX) + sha1_buf_len*2 + 1);

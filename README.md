@@ -25,7 +25,7 @@ For a quick usage example, take a look at the included `example.c`, which
 implements a command-line tool for computing ID values. If your system
 supports `pkg-config` and has GLib and Libgcrypt with development
 components installed, the (very basic) included Makefile should work.
-A few examples:
+An example:
 
 ```
 $ ./example tcp 128.232.110.120 66.35.250.204 34855 80
